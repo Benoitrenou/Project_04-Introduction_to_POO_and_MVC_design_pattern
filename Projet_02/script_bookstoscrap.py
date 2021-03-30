@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 import re #traiter regular expression
 
 url = input ('URL de votre livre : ')
@@ -32,11 +33,17 @@ if response.ok :
 	rating = soup.find("p", class_=re.compile("star-rating")).get("class")[1]
 	rating_dic = {"One": "1", "Two": "2", "Three": "3", "Four": "4", "Five": "5"}
 	note = rating_dic[rating]
+	#extraction note comme clé dictionnaire pour résultat plus lisible
 
-	print (f'{title}, {UPC}')
-	#print pour vérifier bonne exécution
 
 #message erreur si problème dans URL
 else : 
 	print (response)
 	print ('Erreur : révisez URL ou connexion')	
+
+with open(f"livre-{title}.csv", "w", encoding="utf-8") as outf: 
+#ouverture en dynamique pour fermer automatiquement à la sortie de l'indentation
+	spamwriter = csv.writer(outf, delimiter=";")
+	outf.write("Titre;UPC;Catégorie;Description;Prix HT en £;Prix TTC en £;Articles en stock;URL Image;Note sur 5;URL article\n")
+	outf.write(title+ ";"+ UPC+ ";"+ CATEG+ ";"+ DESC+ ";"+ prixHT+ ";"+ prixTTC+ ";"+ stock+ ";"+ image_url+ ";"+ note+ ";"+ url+ "\n")
+	print (f'Données {title} téléchargées et disponibles')
