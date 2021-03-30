@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+import shutil
 import re #traiter regular expression
 
 url = input ('URL de votre livre : ')
@@ -34,12 +35,23 @@ if response.ok :
 	rating_dic = {"One": "1", "Two": "2", "Three": "3", "Four": "4", "Five": "5"}
 	note = rating_dic[rating]
 	#extraction note comme clé dictionnaire pour résultat plus lisible
+	
+	titre_image = url.replace("http://books.toscrape.com/catalogue/", "").replace("/index.html", "")
+	filename = f"Image_{titre_image}.jpeg"
 
+	r = requests.get(image_url, stream=True)
+	if r.status_code == 200:
+		r.raw.decode_content = True
+		with open(filename, "wb") as f:
+			shutil.copyfileobj(r.raw, f)
+		print (f' Image de {title} téléchargée')
+	else : 
+		print (f'Image de {title} non téléchargée - problème laison URL')
 
 #message erreur si problème dans URL
 else : 
 	print (response)
-	print ('Erreur : révisez URL ou connexion')	
+	print ('Erreur : révisez URL du livre ou votre connexion')	
 
 with open(f"livre-{title}.csv", "w", encoding="utf-8") as outf: 
 #ouverture en dynamique pour fermer automatiquement à la sortie de l'indentation
