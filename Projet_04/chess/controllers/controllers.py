@@ -35,7 +35,7 @@ class CreatePlayerController:
 	def __call__(self):
 		new_player_attributes = self.view.get_player_informations()
 		new_player = Player(*new_player_attributes)
-		new_player.player_manager.save()
+		new_player.save(new_player)
 		print (f'{new_player} is now saved in database - ID = {new_player.id}')
 		# print dans controller à passer dans view
 		return HomeMenuController
@@ -53,7 +53,7 @@ class CreateTournamentController:
 		new_tournament.save(new_tournament)
 		print (f'{new_tournament.name} is now saved in database - ID = {new_tournament.id}')
 		# print in a controller - pass in a view
-		return HomeMenuController	
+		return HomeMenuController
 
 class PlayTournamentController:
 

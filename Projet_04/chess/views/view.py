@@ -1,4 +1,5 @@
 from models.player import Player
+from models.tournament import Tournament
 
 class HomeMenuView:
 
@@ -39,3 +40,4 @@ class PlayTournamentView:
 	def get_tournament(self):
 		while True:
 			return (input('ID of tournament to be played ?'))
+

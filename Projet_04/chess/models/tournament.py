@@ -25,7 +25,7 @@ class TournamentManager:
     	tournaments_table.update({"matches_already_played" : updated_matches}, query.name == tournament.name)
     	tournaments_table.update({"current_round" : tournament.current_round}, query.name == tournament.name)
 
-class Tournament (TournamentManager):
+class Tournament(TournamentManager):
 
 	ROUND_NUMBER=1
 	DEFAULT_NUMBER_OF_PLAYERS = 8
@@ -40,7 +40,7 @@ class Tournament (TournamentManager):
 		self.number_of_players = self.DEFAULT_NUMBER_OF_PLAYERS
 		self.number_of_rounds = self.DEFAULT_NUMBER_OF_ROUNDS
 
-	def add_player(self, ref_joueur, players_table):
+	def add_player(self, ref_joueur, players_table=players_table):
 		"""Ajoute un joueur depuis players_table avec son doc_id"""
 		self.players.append(Player.deserialize(players_table.get(doc_id=float(ref_joueur))))
 		for player in self.players:
@@ -62,7 +62,7 @@ class Tournament (TournamentManager):
 		self.get_classment()
 		self.round = Round (f'Round {str(self.current_round)}')
 		self.rounds.append(self.round)
-		half_index = int(self.DEFAULT_NUMBER_OF_PLAYERS/2)
+		half_index = int(self.number_of_players/2)
 		players_first_half = self.players[:half_index]
 		players_second_half = self.players[half_index:]
 		for match in zip(players_first_half, players_second_half):
@@ -80,7 +80,7 @@ class Tournament (TournamentManager):
 		"""Other rounds than first one playing method"""
 		self.current_round += 1
 		self._sort_players()
-		self.round = Round (f'Round n°{self.current_round}')
+		self.round = Round (f'Round {self.current_round}')
 		self.rounds.append(self.round)
 		round_players = self.players[:]
 		while len(round_players) != 0:
@@ -105,14 +105,14 @@ class Tournament (TournamentManager):
 		self.players = sorted(self.players, reverse=True)
 		return self.players
 
-	def get_classment(self, players_table, query):
-		# à déplacer dans controler via méthode sort_players()
+	def get_classment(self, players_table=players_table, query=query):
+		# à déplacer dans view via méthode sort_players()
 		"""Print classement des joueurs selon méthode sort_players()
 		"""
 		print (f'Classement actuel :')
 		for player in self._sort_players():
 			players_table.update({"tournament_point" : player.tournament_point}, query.firstname == player.firstname)
-			print (f'{player.firstname.capitalize()} avec {player.tournament_point} points')
+			print (f'{player.firstname.capitalize()} avec {player.tournament_point} points - Ranking = {player.ranking}')
 		print ('')
 
 	def serialize(self):

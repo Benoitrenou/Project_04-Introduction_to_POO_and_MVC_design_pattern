@@ -3,24 +3,23 @@ from datetime import datetime
 
 SEX_POSSIBLE = ["M", "F"]
 
-def validate_birthday(date_text):
-	"""Vérifie validité du format de Player.birthday
-	"""
-	try:
-		if date_text != datetime.strptime(date_text, '%d/%m/%Y').strftime('%d/%m/%Y'):
-			raise ValueError
-		return date_text
-	except ValueError:
-		return (f'ValueError : birthday should be in format DD/MM/YYYY')
+def validate_birthday(date):
+    """Vérifie validité du format de Player.birthday"""
+    try:
+        if date != datetime.strptime(date, '%d/%m/%Y').strftime('%d/%m/%Y'):
+            raise ValueError
+        return date
+    except ValueError:
+        return (f'ValueError : birthday should be in format DD/MM/YYYY')
 
-def validate_sex(sex_text):
+def validate_sex(sex):
     """Vérifie validité de l'attribut Player.sex"""
     try:
-        if sex_text not in SEX_POSSIBLE:
+        if sex not in SEX_POSSIBLE:
             raise ValueError
-        return sex_text
+        return sex
     except ValueError:
-        return f"ValueError : {sex_text} is not a valid sex"
+        return f"ValueError : {sex} is not a valid sex"
 
 db = TinyDB('db.json', indent=4)
 players_table = db.table('players')
@@ -37,9 +36,9 @@ class PlayerManager:
 
     def update(self, field, value, player_id, query = joueur.id, table=players_table):
         table.update({field: int(value)}, query == player_id)
-
+        
 class Player(PlayerManager):
-
+    
     def __init__(
         self, firstname, lastname, birthday, sex, ranking, tournament_point=0, id=None
     ):
@@ -47,7 +46,7 @@ class Player(PlayerManager):
         self.lastname = lastname
         self.birthday = validate_birthday(birthday)
         self.sex = validate_sex(sex)
-        self.ranking = ranking
+        self.ranking = int(ranking)
         self.tournament_point = int(tournament_point)
         self.id = id
 
