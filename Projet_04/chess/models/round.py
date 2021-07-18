@@ -15,20 +15,12 @@ class Round:
 		return f'{self.name}'
 
 	def add_match(self, match):
-		""" Ajoute un match à round.matches []
-		"""
+		"""Add a match to round.matches."""
 		self.matches.append(match)
 		return self.matches
 
-	def get_results(self):
-		""" Exécute méthode winner_is () de la classe Match sur chaque match de round.matches[]
-		"""
-		for match in self.matches:
-			match.winner_is()
-
 	def serialize(self):
-		""" Renvoie une écriture de Round adaptée au format JSON - Appelle méthode Match.serialize()
-		"""
+		"""Return an instance of Round in JSON format written data."""
 		matches = [match.serialize() for match in self.matches]
 		return {
 		'matches': matches,
@@ -37,8 +29,7 @@ class Round:
 		
 	@classmethod
 	def deserialize(cls, data):
-		"""Crée une instance de Round à partir de données au format JSON
-		"""
+		"""Return instance of Round from JSON format written data."""
 		round = cls(name=data['name'])
 		for match in data['matches']:
 			game = Match.deserialize(match)

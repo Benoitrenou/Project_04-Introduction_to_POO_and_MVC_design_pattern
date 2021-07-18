@@ -1,26 +1,6 @@
 from tinydb import TinyDB, Query
 from datetime import datetime
 
-SEX_POSSIBLE = ["M", "F"]
-
-def validate_birthday(date):
-    """Vérifie validité du format de Player.birthday"""
-    try:
-        if date != datetime.strptime(date, '%d/%m/%Y').strftime('%d/%m/%Y'):
-            raise ValueError
-        return date
-    except ValueError:
-        return (f'ValueError : birthday should be in format DD/MM/YYYY')
-
-def validate_sex(sex):
-    """Vérifie validité de l'attribut Player.sex"""
-    try:
-        if sex not in SEX_POSSIBLE:
-            raise ValueError
-        return sex
-    except ValueError:
-        return f"ValueError : {sex} is not a valid sex"
-
 db = TinyDB('db.json', indent=4)
 players_table = db.table('players')
 # players_table.truncate()
@@ -30,7 +10,7 @@ class PlayerManager:
     """Manager for DB"""
 
     def save(self, player, table=players_table):
-        """Player saving method"""
+        """Player saving method."""
         player.id = table.insert(player.serialize())
         players_table.update({"id" : player.id}, joueur.firstname == player.firstname)
 
@@ -39,13 +19,15 @@ class PlayerManager:
         
 class Player(PlayerManager):
     
+    SEX_POSSIBLE = ["M", "F"]
+
     def __init__(
         self, firstname, lastname, birthday, sex, ranking, tournament_point=0, id=None
     ):
         self.firstname = firstname
         self.lastname = lastname
-        self.birthday = validate_birthday(birthday)
-        self.sex = validate_sex(sex)
+        self.birthday = birthday
+        self.sex = sex
         self.ranking = int(ranking)
         self.tournament_point = int(tournament_point)
         self.id = id
@@ -72,15 +54,37 @@ class Player(PlayerManager):
         return f"{self.firstname}"
 
     def serialize(self):
-        """Retourne un dictionnaire de Player - format JSON"""
+        """Return a JSON format written version of Player."""
         return self.__dict__
 
     @classmethod
     def deserialize(cls, data):
-        """Crée une instance de Player à partir de données au format JSON"""
+        """Return instance of Player from JSON format written data."""
         player = cls(**data)
         return player
 
     @classmethod
     def list_attributes(cls):
-        return ['Firstname', 'Lastname', 'Birthday DD/MM/YYYY', 'Sex M/F', 'Ranking']
+        """Return a list of attributes required to instance Player."""
+        return ['Firstname', 'Lastname', 'Birthday DD/MM/YYYY', 'Sex M/F', 'Ranking - Positive Integers']
+
+    @classmethod
+    def is_clean(cls, key, value):
+        """Validate format of value depends on the key associated."""
+        if key == 'Birthday DD/MM/YYYY':
+            try:
+                value == datetime.strptime(value, '%d/%m/%Y').strftime('%d/%m/%Y')
+            except ValueError:
+                return False
+        elif key == 'Sex M/F':
+            if value.capitalize() not in cls.SEX_POSSIBLE:
+                return False
+        elif key == 'Ranking - Positive Integers':
+            try:
+                int(value)
+                if int(value) < 0:
+                    return False
+            except:
+                return False
+        else:
+            return True

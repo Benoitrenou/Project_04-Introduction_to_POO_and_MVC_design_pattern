@@ -33,11 +33,22 @@ class CreatePlayerController:
 		self.view = CreatePlayerView()
 
 	def __call__(self):
-		new_player_attributes = self.view.get_player_informations()
-		new_player = Player(*new_player_attributes)
-		new_player.save(new_player)
-		print (f'{new_player} is now saved in database - ID = {new_player.id}')
-		# print dans controller à passer dans view
+		new_player_infos = []
+		new_player_keys = Player.list_attributes()
+		for key in new_player_keys:
+			value = self.view.get_player_informations(key)
+			while Player.is_clean(key, value) is False:
+				self.view.invalid_value()
+				value = self.view.get_player_informations(key)
+			else:
+				new_player_infos.append(value)
+		player_fields= []
+		for field in zip(new_player_keys, new_player_infos):
+			player_fields.append(field)
+		if self.view.confirm_fields(player_fields):
+			new_player = Player(*new_player_infos)
+			new_player.save(new_player)
+			self.view.player_saved(new_player)
 		return HomeMenuController
 
 class CreateTournamentController:
@@ -49,10 +60,9 @@ class CreateTournamentController:
 		new_tournament_attributes = self.view.get_tournament_informations()
 		new_tournament = Tournament(*new_tournament_attributes)
 		while len(new_tournament.players) != new_tournament.number_of_players:
-			new_tournament.add_player(input('Player ID ?'))
+			new_tournament.add_player(self.view.add_player_to_tournament())
 		new_tournament.save(new_tournament)
-		print (f'{new_tournament.name} is now saved in database - ID = {new_tournament.id}')
-		# print in a controller - pass in a view
+		self.view.new_tournament_created(new_tournament)
 		return HomeMenuController
 
 class PlayTournamentController:
@@ -63,7 +73,25 @@ class PlayTournamentController:
 	def __call__(self):
 		tournament_id = self.view.get_tournament()
 		tournament = Tournament.deserialize(tournament_id)
-		tournament.play()
+		while tournament.current_round != tournament.number_of_rounds:
+			if tournament.current_round == 0:
+				round = tournament.organize_first_round()
+				self.view.update_classment(tournament.players)
+				self.view.present_matches(round)
+				for match in round.matches:
+					result = self.view.play_match(match)
+					match.winner_is(result)
+				tournament.sort_players()
+				tournament.end_round_update(tournament)
+			else :
+				round = tournament.organize_next_round()
+				self.view.update_classment(tournament.players)
+				self.view.present_matches(round)
+				for match in round.matches:
+					result = self.view.play_match(match)
+					match.winner_is(result)
+				self.view.update_classment(tournament.sort_players())
+				tournament.end_round_update(tournament)
 		return HomeMenuController
 
 class CreateReportController:
