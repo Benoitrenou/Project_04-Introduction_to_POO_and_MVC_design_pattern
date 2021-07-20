@@ -43,7 +43,12 @@ class TournamentManager:
                 {"tournament_point": player.tournament_point},
                 query.firstname == player.firstname,
             )
-
+    @classmethod
+    def tournaments_report(cls, table=tournaments_table):
+        results = []
+        for row in table:
+            results.append(row)
+        return results
 
 class Tournament(TournamentManager):
 
@@ -58,7 +63,7 @@ class Tournament(TournamentManager):
         self.place = place
         self.starting_day = starting_day
         self.ending_day = ending_day
-        self.time_control = time_control
+        self.time_control = self.DEFAULT_TIME_CONTROL[int(time_control)]
         self.description = description
         self.rounds = []
         self.players = []

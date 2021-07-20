@@ -1,5 +1,5 @@
 from models.player import Player, PlayerManager
-from models.tournament import Tournament
+from models.tournament import Tournament, TournamentManager
 from utils.menus import Menu
 from views.view import *
 
@@ -151,8 +151,8 @@ class CreateReportMenuController:
 
     def __call__(self):
         self.menu.add("auto", "Report of all players", AllPlayersReportController)
+        self.menu.add("auto", "Report of all tournaments", AllTournamentsReportController)
         self.menu.add("auto", "Report of players of a tournament", HomeMenuController)
-        self.menu.add("auto", "Report of all tournaments", HomeMenuController)
         self.menu.add("auto", "Report of rounds of a tournament", HomeMenuController)
         self.menu.add("auto", "Report of matchs of a tournament", HomeMenuController)
         self.menu.add("q", "Back to Home Menu", HomeMenuController)
@@ -176,12 +176,19 @@ class AllPlayersReportController:
             return CreateReportMenuController
         if int(criterion) == 1:
             results = PlayerManager.alphabetic_players_report()
-            self.view.presents_results(results)
+            self.view.presents_players_report(results)
         if int(criterion) == 2:
             results = PlayerManager.ranking_players_report()
-            self.view.presents_results(results)
+            self.view.presents_players_report(results)
         return HomeMenuController
 
+class AllTournamentsReportController:
+    def __init__(self):
+        self.view = CreateReportView()
+
+    def __call__(self):
+        results = TournamentManager.tournaments_report()
+        self.view.presents_tournaments_report(results)
 
 class EndScreenController:
     def __call__(self):

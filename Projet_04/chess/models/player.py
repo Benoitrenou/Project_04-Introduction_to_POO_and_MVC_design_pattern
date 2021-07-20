@@ -28,20 +28,20 @@ class PlayerManager:
     @classmethod
     def alphabetic_players_report(cls, table=players_table):
         """Return a list of all players sorted by alphabetic order."""
-        liste = []
+        results = []
         for row in table:
-            liste.append(row)
-        liste.sort(key=lambda i: (i["lastname"], i["firstname"]))
-        return liste
+            results.append(row)
+        results.sort(key=lambda i: (i["lastname"], i["firstname"]))
+        return results
 
     @classmethod
     def ranking_players_report(cls, table=players_table):
         """Return a list of all players sorted by ranking."""
-        liste = []
+        results = []
         for row in table:
-            liste.append(row)
-        liste.sort(key=lambda i: (i["ranking"]), reverse=True)
-        return liste
+            results.append(row)
+        results.sort(key=lambda i: (i["ranking"]), reverse=True)
+        return results
 
     @classmethod
     def search_by_id(cls, player_id, table=players_table):

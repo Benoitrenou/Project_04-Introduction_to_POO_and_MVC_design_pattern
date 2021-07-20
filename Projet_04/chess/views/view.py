@@ -164,7 +164,7 @@ class CreateReportMenuView:
 
 
 class CreateReportView:
-    def get_criterion(self):
+    def get_criterion_for_players(self):
         """Return reference of criterion of research choosed by user."""
         print("Report by 1- Alphabetic order | 2- Ranking")
         criterion = input(">>")
@@ -174,9 +174,18 @@ class CreateReportView:
         """Inform user that input is a not in a valid format."""
         print("Value invalid - Please respect format")
 
-    def presents_results(self, results):
+    def presents_players_report(self, results):
         """Print items of results via list comprehension."""
         for item in results:
             print(f"{item['firstname']} {item['lastname']}")
             print(f"ID : {item['id']})- Ranking : {item['ranking']}")
             print("")
+
+    def presents_tournaments_report(self, results):
+        """Print items of results via list comprehension."""
+        for item in results:
+            print(f"Tournament : {item['name']}")
+            print (f"Place : {item['place']} - From {item['starting_day']} to {item['ending_day']}")
+            print (f"Time-control : {item['time_control']}")
+            print (f"{item['description']}")
+            print ("")
