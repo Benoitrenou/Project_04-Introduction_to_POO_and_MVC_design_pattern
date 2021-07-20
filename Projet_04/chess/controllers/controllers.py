@@ -152,9 +152,9 @@ class CreateReportMenuController:
     def __call__(self):
         self.menu.add("auto", "Report of all players", AllPlayersReportController)
         self.menu.add("auto", "Report of all tournaments", AllTournamentsReportController)
-        self.menu.add("auto", "Report of players of a tournament", HomeMenuController)
-        self.menu.add("auto", "Report of rounds of a tournament", HomeMenuController)
-        self.menu.add("auto", "Report of matchs of a tournament", HomeMenuController)
+        self.menu.add("auto", "Report of players of a tournament", TournamentPlayersReportController)
+        self.menu.add("auto", "Report of rounds of a tournament", TournamentRoundsReportController)
+        self.menu.add("auto", "Report of matchs of a tournament", TournamentMatchesReportController)
         self.menu.add("q", "Back to Home Menu", HomeMenuController)
         user_choice = self.view.get_user_choice()
         return user_choice.handler
@@ -163,9 +163,11 @@ class CreateReportMenuController:
 class AllPlayersReportController:
     def __init__(self):
         self.view = CreateReportView()
+        self.manager = PlayerManager()
 
     def __call__(self):
-        criterion = self.view.get_criterion()
+        results = self.manager.all_players_report()
+        criterion = self.view.get_report_criterion()
         try:
             int(criterion)
             if int(criterion) not in [1, 2]:
@@ -175,20 +177,67 @@ class AllPlayersReportController:
             self.view.invalid_value()
             return CreateReportMenuController
         if int(criterion) == 1:
-            results = PlayerManager.alphabetic_players_report()
-            self.view.presents_players_report(results)
+            results.sort(key=lambda i: (i["lastname"], i["firstname"]))
         if int(criterion) == 2:
-            results = PlayerManager.ranking_players_report()
-            self.view.presents_players_report(results)
+            results.sort(key=lambda i: (i["ranking"]), reverse=True)
+        self.view.presents_players_report(results)
         return HomeMenuController
 
 class AllTournamentsReportController:
     def __init__(self):
         self.view = CreateReportView()
+        self.manager = TournamentManager()
 
     def __call__(self):
-        results = TournamentManager.tournaments_report()
+        results = self.manager.tournaments_report()
         self.view.presents_tournaments_report(results)
+        return HomeMenuController
+
+class TournamentPlayersReportController:
+    def __init__(self):
+        self.view = CreateReportView()
+        self.manager = TournamentManager()
+
+    def __call__(self):
+        tournament_id = self.view.get_id()
+        results = self.manager.tournament_players_report(tournament_id)
+        criterion = self.view.get_report_criterion()
+        try:
+            int(criterion)
+            if int(criterion) not in [1, 2]:
+                self.view.invalid_value()
+                return CreateReportMenuController
+        except ValueError:
+            self.view.invalid_value()
+            return CreateReportMenuController
+        if int(criterion) == 1:
+            results.sort(key=lambda i: (i["lastname"], i["firstname"]))
+        if int(criterion) == 2:
+            results.sort(key=lambda i: (i["ranking"]), reverse=True)
+        self.view.presents_players_report(results)
+        return HomeMenuController
+
+class TournamentRoundsReportController:
+    def __init__(self):
+        self.view = CreateReportView()
+        self.manager = TournamentManager()
+
+    def __call__(self):
+        tournament_id = self.view.get_id()
+        results = self.manager.tournament_rounds_report(tournament_id)
+        self.view.presents_rounds_report(results)
+        return HomeMenuController
+
+class TournamentMatchesReportController:
+    def __init__(self):
+        self.view = CreateReportView()
+        self.manager = TournamentManager()
+
+    def __call__(self):
+        tournament_id = self.view.get_id()
+        results = self.manager.tournament_matches_report(tournament_id)
+        self.view.presents_matches_report(results)
+        return HomeMenuController
 
 class EndScreenController:
     def __call__(self):

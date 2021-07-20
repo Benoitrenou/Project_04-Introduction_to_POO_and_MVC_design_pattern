@@ -3,7 +3,7 @@ from datetime import datetime
 from .round import Round
 from .player import Player
 from .match import Match
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, Query, where
 
 db = TinyDB("db.json", indent=4)
 tournaments_table = db.table("tournaments")
@@ -43,12 +43,31 @@ class TournamentManager:
                 {"tournament_point": player.tournament_point},
                 query.firstname == player.firstname,
             )
-    @classmethod
-    def tournaments_report(cls, table=tournaments_table):
+    def tournaments_report(self, table=tournaments_table):
+        """Return a list of all tournaments of database."""
         results = []
         for row in table:
             results.append(row)
         return results
+
+    def tournament_players_report(self, tournament_id, tournaments_table=tournaments_table, players_table=players_table):
+        """Return a list of JSON data of players of a tournament."""
+        report = []
+        players = tournaments_table.get(query.id == int(tournament_id))['players']
+        for player_id in players:
+            player = players_table.get(query.id == int(player_id))
+            report.append(player)
+        return report
+
+    def tournament_rounds_report(self, tournament_id, table=tournaments_table):
+        """Return JSON data of Rounds of a Tournament."""
+        report = table.get(query.id == int(tournament_id))['rounds']
+        return report
+
+    def tournament_matches_report(self, tournament_id, table=tournaments_table):
+        """Return JSON data of Matches of a Tournament."""
+        report = table.get(query.id == int(tournament_id))['matches_already_played']
+        return report
 
 class Tournament(TournamentManager):
 

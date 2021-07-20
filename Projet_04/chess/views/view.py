@@ -164,7 +164,7 @@ class CreateReportMenuView:
 
 
 class CreateReportView:
-    def get_criterion_for_players(self):
+    def get_report_criterion(self):
         """Return reference of criterion of research choosed by user."""
         print("Report by 1- Alphabetic order | 2- Ranking")
         criterion = input(">>")
@@ -174,18 +174,38 @@ class CreateReportView:
         """Inform user that input is a not in a valid format."""
         print("Value invalid - Please respect format")
 
-    def presents_players_report(self, results):
-        """Print items of results via list comprehension."""
-        for item in results:
+    def presents_players_report(self, report):
+        """Print items of players report via list comprehension."""
+        for item in report:
             print(f"{item['firstname']} {item['lastname']}")
             print(f"ID : {item['id']})- Ranking : {item['ranking']}")
             print("")
 
-    def presents_tournaments_report(self, results):
-        """Print items of results via list comprehension."""
-        for item in results:
+    def presents_tournaments_report(self, report):
+        """Print items of tournaments report via list comprehension."""
+        for item in report:
             print(f"Tournament : {item['name']}")
             print (f"Place : {item['place']} - From {item['starting_day']} to {item['ending_day']}")
             print (f"Time-control : {item['time_control']}")
             print (f"{item['description']}")
             print ("")
+
+    def get_id(self):
+        """Return an integer via user's input."""
+        print('ID ?')
+        choosen_id = input('>>')
+        return choosen_id
+
+    def presents_rounds_report(self, report):
+        """Print items of tournament's rounds report via list comprehension."""
+        for item in report:
+            print(f"Name : {item['name']}")
+            print (f"Number : {item['number']}")
+            print (f"From {item['date_time_start']} to {item['date_time_end']}")
+            print (f"Matches : {item['matches']}")
+
+    def presents_matches_report(self, report):
+        """Print items of tournament's matches report via list comprehension."""
+        for item in report:
+            print(item)
+

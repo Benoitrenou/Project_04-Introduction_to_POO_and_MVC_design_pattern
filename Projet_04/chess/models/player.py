@@ -25,26 +25,14 @@ class PlayerManager:
         """Player's ranking update method."""
         table.update({"ranking": int(new_ranking)}, query == player_id)
 
-    @classmethod
-    def alphabetic_players_report(cls, table=players_table):
-        """Return a list of all players sorted by alphabetic order."""
+    def all_players_report(self, table=players_table):
+        """Return a list of all players data."""
         results = []
         for row in table:
             results.append(row)
-        results.sort(key=lambda i: (i["lastname"], i["firstname"]))
         return results
 
-    @classmethod
-    def ranking_players_report(cls, table=players_table):
-        """Return a list of all players sorted by ranking."""
-        results = []
-        for row in table:
-            results.append(row)
-        results.sort(key=lambda i: (i["ranking"]), reverse=True)
-        return results
-
-    @classmethod
-    def search_by_id(cls, player_id, table=players_table):
+    def search_by_id(self, player_id, table=players_table):
         """Return JSON data of a player from database through his id."""
         return table.get(joueur.id == int(player_id))
 
