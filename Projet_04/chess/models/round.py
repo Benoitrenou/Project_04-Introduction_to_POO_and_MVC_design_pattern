@@ -11,10 +11,12 @@ class Round:
         self.date_time_end = None
 
     def starts(self):
-    	self.date_time_start = datetime.now().strftime("%d/%m/%Y_%Hh%M-%Ss")
+        """Define the date_time_start attribute of a round at the moment it is called."""
+        self.date_time_start = datetime.now().strftime("%d/%m/%Y_%Hh%M-%Ss")
 
     def ends(self):
-    	self.date_time_end = datetime.now().strftime("%d/%m/%Y_%Hh%M-%Ss")
+        """Define the date_time_end attribute of a round at the moment it is called."""
+        self.date_time_end = datetime.now().strftime("%d/%m/%Y_%Hh%M-%Ss")
 
     def __str__(self):
         return f"{self.name}"
@@ -35,7 +37,7 @@ class Round:
             "name": self.name,
             "number": self.number,
             "date_time_start": self.date_time_start,
-            "date_time_end": self.date_time_end
+            "date_time_end": self.date_time_end,
         }
 
     @classmethod

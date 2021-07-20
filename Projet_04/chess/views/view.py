@@ -1,7 +1,3 @@
-from models.player import Player
-from models.tournament import Tournament
-
-
 class HomeMenuView:
     def __init__(self, menu):
         self.menu = menu
@@ -40,12 +36,12 @@ class CreatePlayerView:
     def player_saved(self, player):
         """Print confirmation of saving profil of a player in database."""
         print(
-            f"Profil de {player.firstname.capitalize()} sauvegardé - ID : {player.id}"
+            f"Profil de {player.firstname.capitalize()} sauvegardé - ID = {player.id}"
         )
 
     def invalid_value(self):
         """Inform user that input is a not in a valid format."""
-        print(f"Value invalid - Please respect format")
+        print("Value invalid - Please respect format")
 
 
 class CreateTournamentView:
@@ -78,7 +74,7 @@ class CreateTournamentView:
 
     def invalid_value(self):
         """Inform user that input is a not in a valid format."""
-        print(f"Value invalid - Please respect format")
+        print("Value invalid - Please respect format")
 
 
 class PlayTournamentView:
@@ -96,18 +92,18 @@ class PlayTournamentView:
     def play_match(self, match):
         """Return input of user 0 or 1 or 2."""
         winner = input(
-            f"Who is the winner : 1- {match.player_1.firstname} | 2 - {match.player_2.firstname} | 0 - Draw ?"
+            f"Who is the winner : 1- {match.player_1.firstname} | 2- {match.player_2.firstname} | 0- Draw ?"
         )
         while int(winner) not in [0, 1, 2]:
-            print(f"Value invalid - Please respect format")
+            print("Value invalid - Please respect format")
             winner = input(
-                f"Who is the winner : 1- {match.player_1.firstname} | 2 - {match.player_2.firstname} | 0 - Draw ?"
+                f"Who is the winner : 1- {match.player_1.firstname} | 2- {match.player_2.firstname} | 0- Draw ?"
             )
         return int(winner)
 
     def update_classment(self, players):
         """Print each player of players."""
-        print(f"\nClassement actuel :")
+        print("\nClassement actuel :")
         for player in players:
             print(
                 f"{player.firstname.capitalize()} avec {player.tournament_point} points - Ranking = {player.ranking}"
@@ -121,12 +117,66 @@ class PlayTournamentView:
         )
 
     def get_new_ranking(self, player):
-    	"""Return new ranking of player."""
-    	print(f"{player.firstname.capitalize()} {player.lastname.capitalize()}")
-    	print(f"Player ID : {player.id}")
-    	print(f"Actual ranking : {player.ranking}")
-    	new_rank = input (f"New rank ? >>")
-    	return new_rank
+        """Return new ranking of player."""
+        print(f"{player.firstname.capitalize()} {player.lastname.capitalize()}")
+        print(f"Player ID : {player.id}")
+        print(f"Actual ranking : {player.ranking}")
+        new_rank = input("New rank ? >>")
+        return new_rank
+
 
 class UpdateRankingView:
-	pass
+    def get_player_id(self):
+        """Return ID entered by user."""
+        print("Enter player ID")
+        player_id = input(">>")
+        return player_id
+
+    def invalid_value(self):
+        """Inform user that input is a not in a valid format."""
+        print("Value invalid - Please respect format")
+
+    def get_new_ranking(self, player):
+        """Return new ranking of player."""
+        print(f"{player.firstname.capitalize()} {player.lastname.capitalize()}")
+        print(f"Player ID : {player.id}")
+        print(f"Actual ranking : {player.ranking}")
+        new_rank = input("New rank ? >>")
+        return new_rank
+
+
+class CreateReportMenuView:
+    def __init__(self, menu):
+        self.menu = menu
+
+    def _display_menu(self):
+        """Print each key - entry of menu.items()"""
+        for key, entry in self.menu.items():
+            print(f"{key} : {entry.option}")
+
+    def get_user_choice(self):
+        """Return user choice of menu."""
+        while True:
+            self._display_menu()
+            choice = input(">>")
+            if choice in self.menu:
+                return self.menu[choice]
+
+
+class CreateReportView:
+    def get_criterion(self):
+        """Return reference of criterion of research choosed by user."""
+        print("Report by 1- Alphabetic order | 2- Ranking")
+        criterion = input(">>")
+        return criterion
+
+    def invalid_value(self):
+        """Inform user that input is a not in a valid format."""
+        print("Value invalid - Please respect format")
+
+    def presents_results(self, results):
+        """Print items of results via list comprehension."""
+        for item in results:
+            print(f"{item['firstname']} {item['lastname']}")
+            print(f"ID : {item['id']})- Ranking : {item['ranking']}")
+            print("")

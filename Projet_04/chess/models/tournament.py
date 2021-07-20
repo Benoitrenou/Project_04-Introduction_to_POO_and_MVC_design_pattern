@@ -49,7 +49,7 @@ class Tournament(TournamentManager):
 
     DEFAULT_NUMBER_OF_PLAYERS = 8
     DEFAULT_NUMBER_OF_ROUNDS = 4
-    DEFAULT_TIME_CONTROL = {1:'Bullet', 2:'Blitz', 3:'Coup Rapide'}
+    DEFAULT_TIME_CONTROL = {1: "Bullet", 2: "Blitz", 3: "Coup Rapide"}
 
     def __init__(
         self, name, place, starting_day, ending_day, time_control, description
@@ -66,18 +66,18 @@ class Tournament(TournamentManager):
         self.current_round = 0
         self.number_of_players = self.DEFAULT_NUMBER_OF_PLAYERS
         self.number_of_rounds = self.DEFAULT_NUMBER_OF_ROUNDS
-        # self.is_finished = self.is_finished()
+        # self.completed = False
 
     # def is_finished(self):
-    # 	if self.number_of_rounds == self.current_round:
-    # 		return True
+    # 	if int(self.number_of_rounds) == int(self.current_round):
+    # 		return self.completed is True
     # 	else:
-    # 		return False
+    # 		return self.completed is False
 
-    def add_player(self, ref_joueur, players_table=players_table):
+    def add_player(self, player_id, players_table=players_table):
         """Add a player from database with his id to Tournament."""
         self.players.append(
-            Player.deserialize(players_table.get(doc_id=float(ref_joueur)))
+            Player.deserialize(players_table.get(doc_id=int(player_id)))
         )
         for player in self.players:
             player.tournament_point = 0
@@ -186,16 +186,16 @@ class Tournament(TournamentManager):
 
     @classmethod
     def clean_attributes_infos(cls, key, value):
-    	"""Validate format of attributes for Tournament instanciation."""
-    	if key == "Time_control 1-Bullet | 2-Blitz | 3-Coup Rapide":
-    		try :
-    			int(value)
-	    		if int(value) not in [1, 2, 3]:
-	    			return False
-	    	except ValueError:
-	    		return False
-    	if key == "Starting_day DD/MM/YYYY" or key == "Ending_day DD/MM/YYYY":
-    		try:
-    			value == datetime.strptime(value, "%d/%m/%Y").strftime("%d/%m/%Y")
-    		except ValueError:
-    			return False
+        """Validate format of attributes for Tournament instanciation."""
+        if key == "Time_control 1-Bullet | 2-Blitz | 3-Coup Rapide":
+            try:
+                int(value)
+                if int(value) not in [1, 2, 3]:
+                    return False
+            except ValueError:
+                return False
+        if key == "Starting_day DD/MM/YYYY" or key == "Ending_day DD/MM/YYYY":
+            try:
+                value == datetime.strptime(value, "%d/%m/%Y").strftime("%d/%m/%Y")
+            except ValueError:
+                return False

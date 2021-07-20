@@ -19,9 +19,34 @@ class PlayerManager:
         """Player's database updating method."""
         table.update({field: int(value)}, query == player_id)
 
-    def update_ranking(self, player_id, new_ranking, query=joueur.id, table=players_table):
+    def update_ranking(
+        self, player_id, new_ranking, query=joueur.id, table=players_table
+    ):
         """Player's ranking update method."""
         table.update({"ranking": int(new_ranking)}, query == player_id)
+
+    @classmethod
+    def alphabetic_players_report(cls, table=players_table):
+        """Return a list of all players sorted by alphabetic order."""
+        liste = []
+        for row in table:
+            liste.append(row)
+        liste.sort(key=lambda i: (i["lastname"], i["firstname"]))
+        return liste
+
+    @classmethod
+    def ranking_players_report(cls, table=players_table):
+        """Return a list of all players sorted by ranking."""
+        liste = []
+        for row in table:
+            liste.append(row)
+        liste.sort(key=lambda i: (i["ranking"]), reverse=True)
+        return liste
+
+    @classmethod
+    def search_by_id(cls, player_id, table=players_table):
+        """Return JSON data of a player from database through his id."""
+        return table.get(joueur.id == int(player_id))
 
 
 class Player(PlayerManager):
@@ -97,7 +122,7 @@ class Player(PlayerManager):
                 int(value)
                 if int(value) < 0:
                     return False
-            except:
+            except ValueError:
                 return False
         else:
             return True

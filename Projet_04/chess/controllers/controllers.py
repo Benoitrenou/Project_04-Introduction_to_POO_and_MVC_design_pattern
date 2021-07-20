@@ -1,4 +1,4 @@
-from models.player import Player
+from models.player import Player, PlayerManager
 from models.tournament import Tournament
 from utils.menus import Menu
 from views.view import *
@@ -21,11 +21,12 @@ class HomeMenuController:
         self.view = HomeMenuView(self.menu)
 
     def __call__(self):
-        self.menu.add("auto", "Créer un joueur", CreatePlayerController)
-        self.menu.add("auto", "Créer un tournoi", CreateTournamentController)
-        self.menu.add("auto", "Reprendre tournoi", PlayTournamentController)
-        self.menu.add("auto", "Mettre à jour classement d'un joueur", UpdateRankingController)
-        self.menu.add("q", "Quitter l'application", EndScreenController)
+        self.menu.add("auto", "Create a player", CreatePlayerController)
+        self.menu.add("auto", "Create a tournament", CreateTournamentController)
+        self.menu.add("auto", "Play a tournament", PlayTournamentController)
+        self.menu.add("auto", "Update a player's ranking", UpdateRankingController)
+        self.menu.add("auto", "Create a report", CreateReportMenuController)
+        self.menu.add("q", "Leave the application", EndScreenController)
         user_choice = self.view.get_user_choice()
         return user_choice.handler
 
@@ -70,7 +71,7 @@ class CreateTournamentController:
                 new_tournament_infos.append(value)
         tournament_fields = []
         for field in zip(new_tournament_keys, new_tournament_infos):
-        	tournament_fields.append(field)
+            tournament_fields.append(field)
         if self.view.confirm_fields(tournament_fields):
             new_tournament = Tournament(*new_tournament_infos)
             while len(new_tournament.players) != new_tournament.number_of_players:
@@ -114,27 +115,74 @@ class PlayTournamentController:
                     match.winner_is(result)
                 self.view.update_classment(tournament.sort_players())
                 if tournament.current_round == tournament.number_of_rounds:
-                	for player in tournament.players:
-                		new_rank = self.view.get_new_ranking(player)
-                		while Player.clean_attributes_infos("ranking", new_rank) is False:
-                			new_rank = self.view.get_new_ranking(player)
-                		player.update_ranking(player.id, new_rank)
+                    for player in tournament.players:
+                        new_rank = self.view.get_new_ranking(player)
+                        while (
+                            Player.clean_attributes_infos("ranking", new_rank) is False
+                        ):
+                            new_rank = self.view.get_new_ranking(player)
+                        player.update_ranking(player.id, new_rank)
                 tournament.saves_update(tournament)
         return HomeMenuController
 
 
 class UpdateRankingController:
     def __init__(self):
-    	self.view = UpdateRankingView()
+        self.view = UpdateRankingView()
 
     def __call__(self):
-    	pass
-    	# vue demande infos pour trouver joueur
-    	# controller trouve joueur via manager
-    	# vue demande nouveau rank
-    	# controller modifie rank via manager
-    	# vue confirme
+        player_id = self.view.get_player_id()
+        try:
+            int(player_id)
+        except ValueError:
+            return UpdateRankingController
+        player = Player.deserialize(PlayerManager.search_by_id(player_id))
+        new_rank = self.view.get_new_ranking(player)
+        while Player.clean_attributes_infos("ranking", new_rank) is False:
+            new_rank = self.view.get_new_ranking(player)
+        player.update_ranking(player.id, new_rank)
+        return HomeMenuController
+
+
+class CreateReportMenuController:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = CreateReportMenuView(self.menu)
+
+    def __call__(self):
+        self.menu.add("auto", "Report of all players", AllPlayersReportController)
+        self.menu.add("auto", "Report of players of a tournament", HomeMenuController)
+        self.menu.add("auto", "Report of all tournaments", HomeMenuController)
+        self.menu.add("auto", "Report of rounds of a tournament", HomeMenuController)
+        self.menu.add("auto", "Report of matchs of a tournament", HomeMenuController)
+        self.menu.add("q", "Back to Home Menu", HomeMenuController)
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
+
+
+class AllPlayersReportController:
+    def __init__(self):
+        self.view = CreateReportView()
+
+    def __call__(self):
+        criterion = self.view.get_criterion()
+        try:
+            int(criterion)
+            if int(criterion) not in [1, 2]:
+                self.view.invalid_value()
+                return CreateReportMenuController
+        except ValueError:
+            self.view.invalid_value()
+            return CreateReportMenuController
+        if int(criterion) == 1:
+            results = PlayerManager.alphabetic_players_report()
+            self.view.presents_results(results)
+        if int(criterion) == 2:
+            results = PlayerManager.ranking_players_report()
+            self.view.presents_results(results)
+        return HomeMenuController
+
 
 class EndScreenController:
-	def __call__(self):
-		print("Quitter l'application")
+    def __call__(self):
+        print("Quitter l'application")
