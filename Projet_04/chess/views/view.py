@@ -185,27 +185,32 @@ class CreateReportView:
         """Print items of tournaments report via list comprehension."""
         for item in report:
             print(f"Tournament : {item['name']}")
-            print (f"Place : {item['place']} - From {item['starting_day']} to {item['ending_day']}")
-            print (f"Time-control : {item['time_control']}")
-            print (f"{item['description']}")
-            print ("")
+            print(
+                f"Place : {item['place']} - From {item['starting_day']} to {item['ending_day']}"
+            )
+            print(f"Time-control : {item['time_control']}")
+            print(f"{item['description']}")
+            print("")
 
     def get_id(self):
         """Return an integer via user's input."""
-        print('ID ?')
-        choosen_id = input('>>')
+        print("ID ?")
+        choosen_id = input(">>")
         return choosen_id
 
     def presents_rounds_report(self, report):
         """Print items of tournament's rounds report via list comprehension."""
         for item in report:
             print(f"Name : {item['name']}")
-            print (f"Number : {item['number']}")
-            print (f"From {item['date_time_start']} to {item['date_time_end']}")
-            print (f"Matches : {item['matches']}")
+            print(f"Number : {item['number']}")
+            print(f"From {item['date_time_start']} to {item['date_time_end']}")
+            print(f"Matches : {item['matches']}")
 
     def presents_matches_report(self, report):
         """Print items of tournament's matches report via list comprehension."""
         for item in report:
             print(item)
 
+class EndScreenView:
+    def ends(self):
+        print ("Leaving application")

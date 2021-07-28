@@ -3,7 +3,7 @@ from datetime import datetime
 from .round import Round
 from .player import Player
 from .match import Match
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, Query
 
 db = TinyDB("db.json", indent=4)
 tournaments_table = db.table("tournaments")
@@ -38,11 +38,15 @@ class TournamentManager:
         tournaments_table.update(
             {"current_round": tournament.current_round}, query.name == tournament.name
         )
+        # tournaments_table.update(
+        #     {"completed": tournament.completed}, query.name == tournament.name
+        # )
         for player in tournament.players:
             players_table.update(
                 {"tournament_point": player.tournament_point},
                 query.firstname == player.firstname,
             )
+
     def tournaments_report(self, table=tournaments_table):
         """Return a list of all tournaments of database."""
         results = []
@@ -50,10 +54,15 @@ class TournamentManager:
             results.append(row)
         return results
 
-    def tournament_players_report(self, tournament_id, tournaments_table=tournaments_table, players_table=players_table):
+    def tournament_players_report(
+        self,
+        tournament_id,
+        tournaments_table=tournaments_table,
+        players_table=players_table,
+    ):
         """Return a list of JSON data of players of a tournament."""
         report = []
-        players = tournaments_table.get(query.id == int(tournament_id))['players']
+        players = tournaments_table.get(query.id == int(tournament_id))["players"]
         for player_id in players:
             player = players_table.get(query.id == int(player_id))
             report.append(player)
@@ -61,13 +70,14 @@ class TournamentManager:
 
     def tournament_rounds_report(self, tournament_id, table=tournaments_table):
         """Return JSON data of Rounds of a Tournament."""
-        report = table.get(query.id == int(tournament_id))['rounds']
+        report = table.get(query.id == int(tournament_id))["rounds"]
         return report
 
     def tournament_matches_report(self, tournament_id, table=tournaments_table):
         """Return JSON data of Matches of a Tournament."""
-        report = table.get(query.id == int(tournament_id))['matches_already_played']
+        report = table.get(query.id == int(tournament_id))["matches_already_played"]
         return report
+
 
 class Tournament(TournamentManager):
 
@@ -90,13 +100,10 @@ class Tournament(TournamentManager):
         self.current_round = 0
         self.number_of_players = self.DEFAULT_NUMBER_OF_PLAYERS
         self.number_of_rounds = self.DEFAULT_NUMBER_OF_ROUNDS
-        # self.completed = False
+        # self.completed = self.is_finished()
 
     # def is_finished(self):
-    # 	if int(self.number_of_rounds) == int(self.current_round):
-    # 		return self.completed is True
-    # 	else:
-    # 		return self.completed is False
+    #     return int(self.number_of_rounds) == int(self.current_round)
 
     def add_player(self, player_id, players_table=players_table):
         """Add a player from database with his id to Tournament."""
@@ -152,18 +159,22 @@ class Tournament(TournamentManager):
         players = [player.id for player in self.players]
         rounds = [round.serialize() for round in self.rounds]
         matches = [match.serialize() for match in self.matches_already_played]
+        for key, value in self.DEFAULT_TIME_CONTROL.items():
+            if self.time_control == value:
+                time_control = key
+        # self.completed = self.is_finished()
         return {
             "name": self.name,
             "place": self.place,
             "starting_day": self.starting_day,
             "ending_day": self.ending_day,
-            "time_control": self.time_control,
+            "time_control": time_control,
             "description": self.description,
             "rounds": rounds,
             "players": players,
             "matches_already_played": matches,
             "current_round": self.current_round,
-            # "finished": self.is_finished
+            # "finished": self.completed
         }
 
     @classmethod
