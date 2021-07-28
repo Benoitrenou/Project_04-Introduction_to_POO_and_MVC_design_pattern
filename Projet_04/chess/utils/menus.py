@@ -1,4 +1,6 @@
 class Menu:
+    """Object Menu builder"""
+
     def __init__(self):
         self._entries = {}
         self._autokey = 1
@@ -23,6 +25,8 @@ class Menu:
 
 
 class MenuEntry:
+    """Object Menu entry builder"""
+
     def __init__(self, option, handler):
         self.option = option
         self.handler = handler

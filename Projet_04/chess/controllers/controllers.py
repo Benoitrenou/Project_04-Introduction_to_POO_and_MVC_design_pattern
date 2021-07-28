@@ -4,7 +4,11 @@ from utils.menus import Menu
 import views.view as view
 from utils.exceptions import InvalidRankError
 
+
 class ApplicationController:
+    """Main controller of application
+    Run others controllers."""
+
     def __init__(self):
         self.controller = None
 
@@ -16,6 +20,8 @@ class ApplicationController:
 
 
 class HomeMenuController:
+    """Controller of home menu."""
+
     def __init__(self):
         self.menu = Menu()
         self.view = view.HomeMenuView(self.menu)
@@ -32,6 +38,8 @@ class HomeMenuController:
 
 
 class CreatePlayerController:
+    """Controller handling instanciation of Player."""
+
     def __init__(self):
         self.view = view.CreatePlayerView()
         self.manager = PlayerManager()
@@ -57,6 +65,8 @@ class CreatePlayerController:
 
 
 class CreateTournamentController:
+    """Controller handling instanciation of Tournament."""
+
     def __init__(self):
         self.view = view.CreateTournamentView()
         self.manager = TournamentManager()
@@ -84,6 +94,8 @@ class CreateTournamentController:
 
 
 class PlayTournamentController:
+    """Controller handling course of a Tournament."""
+
     def __init__(self):
         self.view = view.PlayTournamentView()
         self.tournament_manager = TournamentManager()
@@ -130,6 +142,8 @@ class PlayTournamentController:
 
 
 class UpdateRankingController:
+    """Controller managing update of a Player's ranking."""
+
     def __init__(self):
         self.view = view.UpdateRankingView()
         self.manager = PlayerManager()
@@ -142,13 +156,19 @@ class UpdateRankingController:
             return UpdateRankingController
         player = Player.deserialize(self.manager.search_by_id(player_id))
         new_rank = self.view.get_new_ranking(player)
-        while Player.clean_attributes_infos("Ranking - Positive Integers", new_rank) is False:
+        while (
+            Player.clean_attributes_infos("Ranking - Positive Integers", new_rank)
+            is False
+        ):
+            self.view.invalid_value()
             new_rank = self.view.get_new_ranking(player)
         self.manager.update_ranking(player.id, new_rank)
         return HomeMenuController
 
 
 class CreateReportMenuController:
+    """Main menu to create report."""
+
     def __init__(self):
         self.menu = Menu()
         self.view = view.CreateReportMenuView(self.menu)
@@ -177,6 +197,8 @@ class CreateReportMenuController:
 
 
 class AllPlayersReportController:
+    """Controller managing all players report creation."""
+
     def __init__(self):
         self.view = view.CreateReportView()
         self.manager = PlayerManager()
@@ -201,6 +223,8 @@ class AllPlayersReportController:
 
 
 class AllTournamentsReportController:
+    """Controller managing all tournaments report creation."""
+
     def __init__(self):
         self.view = view.CreateReportView()
         self.manager = TournamentManager()
@@ -212,6 +236,8 @@ class AllTournamentsReportController:
 
 
 class TournamentPlayersReportController:
+    """Controller managing a tournament's players report creation."""
+
     def __init__(self):
         self.view = view.CreateReportView()
         self.manager = TournamentManager()
@@ -237,6 +263,8 @@ class TournamentPlayersReportController:
 
 
 class TournamentRoundsReportController:
+    """Controller managing tournament's rounds report creation."""
+
     def __init__(self):
         self.view = view.CreateReportView()
         self.manager = TournamentManager()
@@ -249,6 +277,8 @@ class TournamentRoundsReportController:
 
 
 class TournamentMatchesReportController:
+    """Controller managing a tournament's matches report creation."""
+
     def __init__(self):
         self.view = view.CreateReportView()
         self.manager = TournamentManager()
@@ -261,6 +291,8 @@ class TournamentMatchesReportController:
 
 
 class EndScreenController:
+    """Controller managing end of application."""
+
     def __init__(self):
         self.view = view.EndScreenView()
 

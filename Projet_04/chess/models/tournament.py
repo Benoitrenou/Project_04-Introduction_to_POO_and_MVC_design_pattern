@@ -13,6 +13,8 @@ query = Query()
 
 
 class TournamentManager:
+    """Object managing relationship Tournament-database."""
+
     def save(self, tournament, table=tournaments_table):
         """Tournament's saving method"""
         tournament.id = table.insert(tournament.serialize())
@@ -79,7 +81,8 @@ class TournamentManager:
         return report
 
 
-class Tournament(TournamentManager):
+class Tournament:
+    """Object Tournament."""
 
     DEFAULT_NUMBER_OF_PLAYERS = 8
     DEFAULT_NUMBER_OF_ROUNDS = 4

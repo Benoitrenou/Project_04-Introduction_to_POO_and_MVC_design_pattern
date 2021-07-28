@@ -3,6 +3,8 @@ from .match import Match
 
 
 class Round:
+    """Object Round of a tournament."""
+
     def __init__(self, name, number):
         self.matches = []
         self.name = name

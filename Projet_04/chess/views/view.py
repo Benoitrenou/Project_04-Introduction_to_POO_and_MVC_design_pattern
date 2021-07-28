@@ -1,4 +1,6 @@
 class HomeMenuView:
+    """View handling HomeMenuController."""
+
     def __init__(self, menu):
         self.menu = menu
 
@@ -17,6 +19,8 @@ class HomeMenuView:
 
 
 class CreatePlayerView:
+    """View handling CreatePlayerController."""
+
     def get_player_informations(self, key):
         """Return user's inputs as value for key."""
         value = input(f"{key} ?")
@@ -45,6 +49,8 @@ class CreatePlayerView:
 
 
 class CreateTournamentView:
+    """View handling CreateTournamentController."""
+
     def get_tournament_informations(self, key):
         """Return user's inputs as value for key."""
         value = input(f"{key} ?")
@@ -78,6 +84,8 @@ class CreateTournamentView:
 
 
 class PlayTournamentView:
+    """View handling PlayTournamentController."""
+
     def get_tournament(self):
         """Return Id of tournament to be played gaved by user."""
         return input("ID of tournament to be played ?")
@@ -126,6 +134,8 @@ class PlayTournamentView:
 
 
 class UpdateRankingView:
+    """View handling UpdateRankingController."""
+
     def get_player_id(self):
         """Return ID entered by user."""
         print("Enter player ID")
@@ -134,7 +144,9 @@ class UpdateRankingView:
 
     def invalid_value(self):
         """Inform user that input is a not in a valid format."""
-        print("Value invalid - Please respect format")
+        print(
+            "Value invalid - Please respect format : rank must be a positive integers"
+        )
 
     def get_new_ranking(self, player):
         """Return new ranking of player."""
@@ -146,6 +158,8 @@ class UpdateRankingView:
 
 
 class CreateReportMenuView:
+    """View handling CreateReportMenuController."""
+
     def __init__(self, menu):
         self.menu = menu
 
@@ -164,6 +178,8 @@ class CreateReportMenuView:
 
 
 class CreateReportView:
+    """View handling creating reports controllers."""
+
     def get_report_criterion(self):
         """Return reference of criterion of research choosed by user."""
         print("Report by 1- Alphabetic order | 2- Ranking")
@@ -211,6 +227,9 @@ class CreateReportView:
         for item in report:
             print(item)
 
+
 class EndScreenView:
+    """View handling EndScreenController."""
+
     def ends(self):
-        print ("Leaving application")
+        print("Leaving application")

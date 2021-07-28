@@ -7,14 +7,18 @@ joueur = Query()
 
 
 class Match:
+    """Object Match of a Tournament."""
+
     def __init__(self, player_1, player_2):
         self.player_1 = player_1
         self.player_2 = player_2
         self.winner = None
 
     def __repr__(self):
-        return f"([{self.player_1.firstname}, {self.player_1.tournament_point}]," \
-        f"[{self.player_2.firstname}, {self.player_2.tournament_point}])"
+        return (
+            f"([{self.player_1.firstname}, {self.player_1.tournament_point}],"
+            f"[{self.player_2.firstname}, {self.player_2.tournament_point}])"
+        )
 
     def winner_is(self, result):
         """Modify both player.tournament_point depends on the result."""
@@ -27,7 +31,7 @@ class Match:
         if result == 0:
             self.player_1.tournament_point += 0.5
             self.player_2.tournament_point += 0.5
-            self.winner = 'Draw'
+            self.winner = "Draw"
         return self.winner
 
     def __str__(self):
@@ -44,7 +48,11 @@ class Match:
 
     def serialize(self):
         """Return a JSON format written version of Match."""
-        return {"player_1": self.player_1.id, "player_2": self.player_2.id, "winner":self.winner}
+        return {
+            "player_1": self.player_1.id,
+            "player_2": self.player_2.id,
+            "winner": self.winner,
+        }
 
     @classmethod
     def deserialize(cls, data, table=players_table):

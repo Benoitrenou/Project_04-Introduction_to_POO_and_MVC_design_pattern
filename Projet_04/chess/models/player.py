@@ -8,7 +8,7 @@ joueur = Query()
 
 
 class PlayerManager:
-    """Manager for DB"""
+    """Object managing relationship Player-database."""
 
     def save(self, player, table=players_table):
         """Player saving method."""
@@ -37,7 +37,10 @@ class PlayerManager:
         return table.get(joueur.id == int(player_id))
 
 
-class Player(PlayerManager):
+class Player:
+    """Object Player
+    Represent a player of chess
+    """
 
     SEX_POSSIBLE = ["M", "F"]
 
