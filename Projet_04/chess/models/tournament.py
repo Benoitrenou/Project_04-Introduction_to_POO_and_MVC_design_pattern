@@ -40,9 +40,9 @@ class TournamentManager:
         tournaments_table.update(
             {"current_round": tournament.current_round}, query.name == tournament.name
         )
-        # tournaments_table.update(
-        #     {"completed": tournament.completed}, query.name == tournament.name
-        # )
+        tournaments_table.update(
+            {"completed": tournament.completed}, query.name == tournament.name
+        )
         for player in tournament.players:
             players_table.update(
                 {"tournament_point": player.tournament_point},
@@ -80,6 +80,11 @@ class TournamentManager:
         report = table.get(query.id == int(tournament_id))["matches_already_played"]
         return report
 
+    def find_uncompleted(self, table=tournaments_table):
+        """Return id of tournament uncompleted."""
+        tournament = tournaments_table.get(query.completed == False)
+        return tournament
+
 
 class Tournament:
     """Object Tournament."""
@@ -103,10 +108,10 @@ class Tournament:
         self.current_round = 0
         self.number_of_players = self.DEFAULT_NUMBER_OF_PLAYERS
         self.number_of_rounds = self.DEFAULT_NUMBER_OF_ROUNDS
-        # self.completed = self.is_finished()
+        self.completed = False
 
-    # def is_finished(self):
-    #     return int(self.number_of_rounds) == int(self.current_round)
+    def is_finished(self):
+        return int(self.number_of_rounds) == int(self.current_round)
 
     def add_player(self, player_id, players_table=players_table):
         """Add a player from database with his id to Tournament."""
@@ -177,7 +182,7 @@ class Tournament:
             "players": players,
             "matches_already_played": matches,
             "current_round": self.current_round,
-            # "finished": self.completed
+            "completed": self.completed
         }
 
     @classmethod
@@ -207,7 +212,7 @@ class Tournament:
             game = Match.deserialize(match)
             tournament.matches_already_played.append(game)
         tournament.current_round = data["current_round"]
-        # tournament.is_finished = data["finished"]
+        tournament.completed = data["completed"]
         return tournament
 
     @classmethod

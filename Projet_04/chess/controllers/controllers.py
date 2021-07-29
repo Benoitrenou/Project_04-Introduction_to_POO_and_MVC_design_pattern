@@ -102,8 +102,14 @@ class PlayTournamentController:
         self.player_manager = PlayerManager()
 
     def __call__(self):
-        tournament_id = self.view.get_tournament()
-        tournament = Tournament.deserialize(tournament_id)
+        tournament_dict = self.tournament_manager.find_uncompleted()
+        if tournament_dict == None:
+            self.view.unfounded_tournament()
+            return HomeMenuController
+        if self.view.confirms_tournament(tournament_dict):
+            tournament = Tournament.deserialize(tournament_dict["id"])
+        else:
+            return HomeMenuController
         while tournament.current_round != tournament.number_of_rounds:
             if tournament.current_round == 0:
                 round = tournament.organize_first_round()
@@ -129,6 +135,7 @@ class PlayTournamentController:
                     match.winner_is(result)
                 self.view.update_classment(tournament.sort_players())
                 if tournament.current_round == tournament.number_of_rounds:
+                    tournament.completed = tournament.is_finished()
                     for player in tournament.players:
                         new_rank = self.view.get_new_ranking(player)
                         while (
@@ -136,7 +143,6 @@ class PlayTournamentController:
                         ):
                             new_rank = self.view.get_new_ranking(player)
                         self.player_manager.update_ranking(player.id, new_rank)
-                # tournament.completed = tournament.is_finished()
                 self.tournament_manager.saves_update(tournament)
         return HomeMenuController
 

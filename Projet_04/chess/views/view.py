@@ -86,9 +86,20 @@ class CreateTournamentView:
 class PlayTournamentView:
     """View handling PlayTournamentController."""
 
-    def get_tournament(self):
-        """Return Id of tournament to be played gaved by user."""
-        return input("ID of tournament to be played ?")
+    def confirms_tournament(self, tournament_dict):
+        """Return True if user confirms informations and launch playing tournament - False if not."""
+        print('Tournament uncompleted :')
+        print (f"Name : {tournament_dict['name']}")
+        confirm = input("Confirm play tournament y/n ?")
+        if confirm == "y":
+            return True
+        else:
+            print("Launching of tournament cancelled")
+            return False
+
+    def unfounded_tournament(self):
+        """Informs user no uncompleted tournament uin database."""
+        print("No uncompleted tournament found - Back to home menu.")
 
     def present_matches(self, round):
         """Print matches of round."""

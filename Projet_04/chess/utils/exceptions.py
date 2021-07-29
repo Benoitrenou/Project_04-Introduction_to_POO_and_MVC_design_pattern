@@ -1,12 +1,15 @@
-class InvalidRankErrorView:
-	def print(self):
+class ExceptionsView:
+	def invalid_rank_error(self):
 		print ("This is not a valid rank")
 
-class InvalidRankError():
+class InvalidRankError(Exception):
 	def __init__(self):
-	    super().__init__()
-	    self.view = InvalidRankErrorView()
+	    # super().__init__()
+	    self.view = ExceptionsView()
 
 	def __call__(self):
-		self.view.print()
+		self.view.invalid_rank_error()
+
+class TournamentFinished:
+	pass
 
