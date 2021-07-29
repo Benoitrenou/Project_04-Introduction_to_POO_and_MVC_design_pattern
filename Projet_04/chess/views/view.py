@@ -51,6 +51,20 @@ class CreatePlayerView:
 class CreateTournamentView:
     """View handling CreateTournamentController."""
 
+    def offers_playing_uncompleted(self, uncompleted_dict):
+        """Return True if user chooses to play uncompleted tournament - False if not."""
+        print('A uncompleted tournament stills remains in database')
+        print(f"Name : {uncompleted_dict['name']}")
+        print(f"Place : {uncompleted_dict['place']}")
+        print(f"Description : {uncompleted_dict['description']}")
+        print(f"From {uncompleted_dict['starting_day']} to {uncompleted_dict['ending_day']} ")
+        confirm = input("Play this tournament y/n ? \nIf no, this tournament will be deleted from database")
+        if confirm == "y":
+            return True
+        else:
+            print("Tournament uncompleted deleted - Launching of new tournament creation")
+            return False
+
     def get_tournament_informations(self, key):
         """Return user's inputs as value for key."""
         value = input(f"{key} ?")

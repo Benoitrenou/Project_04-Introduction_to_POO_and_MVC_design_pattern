@@ -85,6 +85,11 @@ class TournamentManager:
         tournament = tournaments_table.get(query.completed == False)
         return tournament
 
+    def remove_tournament(self, tournament_id, table=tournaments_table):
+        """Remove tournament by his id from database."""
+        table.remove(doc_ids=[tournament_id])
+        return None
+
 
 class Tournament:
     """Object Tournament."""

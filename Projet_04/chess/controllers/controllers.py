@@ -72,6 +72,12 @@ class CreateTournamentController:
         self.manager = TournamentManager()
 
     def __call__(self):
+        uncompleted_dict = self.manager.find_uncompleted()
+        if uncompleted_dict != None:
+            if self.view.offers_playing_uncompleted(uncompleted_dict):
+                return PlayTournamentController
+            else:
+                self.manager.remove_tournament(uncompleted_dict['id'])
         new_tournament_infos = []
         new_tournament_keys = Tournament.list_attributes()
         for key in new_tournament_keys:
