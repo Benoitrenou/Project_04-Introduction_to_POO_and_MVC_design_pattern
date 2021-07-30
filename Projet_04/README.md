@@ -38,7 +38,7 @@ Depuis votre terminal de commande, effectuez les commandes suivantes
 
     $ pip install -r requirements.txt
 
-# II. Utilisation du scritp
+# II. Utilisation du script
 
 Pour lancer le script de l'application depuis le terminal, placez vous dans le dossier chess utilisez la commande : 
 
