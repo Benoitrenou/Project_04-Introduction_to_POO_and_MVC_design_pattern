@@ -1,10 +1,9 @@
 from tinydb import TinyDB, Query
-from datetime import datetime
+
 
 db = TinyDB("db.json", indent=4)
 players_table = db.table("players")
-# players_table.truncate()
-joueur = Query()
+query = Query()
 
 
 class PlayerManager:
@@ -13,14 +12,14 @@ class PlayerManager:
     def save(self, player, table=players_table):
         """Player saving method."""
         player.id = table.insert(player.serialize())
-        players_table.update({"id": player.id}, joueur.firstname == player.firstname)
+        players_table.update({"id": player.id}, query.firstname == player.firstname)
 
-    def update(self, field, value, player_id, query=joueur.id, table=players_table):
+    def update(self, field, value, player_id, query=query.id, table=players_table):
         """Player's database updating method."""
         table.update({field: int(value)}, query == player_id)
 
     def update_ranking(
-        self, player_id, new_ranking, query=joueur.id, table=players_table
+        self, player_id, new_ranking, query=query.id, table=players_table
     ):
         """Player's ranking update method."""
         table.update({"ranking": int(new_ranking)}, query == player_id)
@@ -34,7 +33,7 @@ class PlayerManager:
 
     def search_by_id(self, player_id, table=players_table):
         """Return JSON data of a player from database through his id."""
-        return table.get(joueur.id == int(player_id))
+        return table.get(query.id == int(player_id))
 
 
 class Player:
@@ -56,12 +55,14 @@ class Player:
         self.id = id
 
     def __gt__(self, other):
+        """Defines superiority between two instances of Player in sorting situation."""
         return (self.tournament_point, self.ranking) > (
             other.tournament_point,
             other.ranking,
         )
 
     def __eq__(self, other):
+        """Defines equality between two instances of Player in sorting situation."""
         return (self.tournament_point, self.ranking) == (
             other.tournament_point,
             other.ranking,
@@ -96,24 +97,3 @@ class Player:
             "Sex M/F",
             "Ranking - Positive Integers",
         ]
-
-    @classmethod
-    def clean_attributes_infos(cls, key, value):
-        """Validate format attributes for Player instanciation."""
-        if key == "Birthday DD/MM/YYYY":
-            try:
-                value == datetime.strptime(value, "%d/%m/%Y").strftime("%d/%m/%Y")
-            except ValueError:
-                return False
-        elif key == "Sex M/F":
-            if value.capitalize() not in cls.SEX_POSSIBLE:
-                return False
-        elif key == "Ranking - Positive Integers":
-            try:
-                int(value)
-                if int(value) < 0:
-                    return False
-            except ValueError:
-                return False
-        else:
-            return True

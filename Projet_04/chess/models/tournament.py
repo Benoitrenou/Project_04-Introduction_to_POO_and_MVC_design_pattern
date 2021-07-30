@@ -1,5 +1,4 @@
 from itertools import repeat
-from datetime import datetime
 from .round import Round
 from .player import Player
 from .match import Match
@@ -7,7 +6,6 @@ from tinydb import TinyDB, Query
 
 db = TinyDB("db.json", indent=4)
 tournaments_table = db.table("tournaments")
-# tournaments_table.truncate()
 players_table = db.table("players")
 query = Query()
 
@@ -99,7 +97,7 @@ class Tournament:
     DEFAULT_TIME_CONTROL = {1: "Bullet", 2: "Blitz", 3: "Coup Rapide"}
 
     def __init__(
-        self, name, place, starting_day, ending_day, time_control, description
+        self, name, place, starting_day, ending_day, time_control, description, id=None
     ):
         self.name = name
         self.place = place
@@ -114,8 +112,10 @@ class Tournament:
         self.number_of_players = self.DEFAULT_NUMBER_OF_PLAYERS
         self.number_of_rounds = self.DEFAULT_NUMBER_OF_ROUNDS
         self.completed = False
+        self.id = id
 
     def is_finished(self):
+        """Compare current number number and total rounds number - Return True if equal."""
         return int(self.number_of_rounds) == int(self.current_round)
 
     def add_player(self, player_id, players_table=players_table):
@@ -187,7 +187,8 @@ class Tournament:
             "players": players,
             "matches_already_played": matches,
             "current_round": self.current_round,
-            "completed": self.completed
+            "completed": self.completed,
+            "id": self.id,
         }
 
     @classmethod
@@ -206,6 +207,7 @@ class Tournament:
             ending_day=data["ending_day"],
             time_control=data["time_control"],
             description=data["description"],
+            id=data["id"],
         )
         for player_id in data["players"]:
             joueur = Player.deserialize(players_table.get(doc_id=player_id))
@@ -231,19 +233,3 @@ class Tournament:
             "Time_control 1-Bullet | 2-Blitz | 3-Coup Rapide",
             "Description",
         ]
-
-    @classmethod
-    def clean_attributes_infos(cls, key, value):
-        """Validate format of attributes for Tournament instanciation."""
-        if key == "Time_control 1-Bullet | 2-Blitz | 3-Coup Rapide":
-            try:
-                int(value)
-                if int(value) not in [1, 2, 3]:
-                    return False
-            except ValueError:
-                return False
-        if key == "Starting_day DD/MM/YYYY" or key == "Ending_day DD/MM/YYYY":
-            try:
-                value == datetime.strptime(value, "%d/%m/%Y").strftime("%d/%m/%Y")
-            except ValueError:
-                return False

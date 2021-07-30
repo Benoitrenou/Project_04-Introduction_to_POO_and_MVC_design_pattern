@@ -1,15 +1,26 @@
 class ExceptionsView:
-	def invalid_rank_error(self):
-		print ("This is not a valid rank")
+    """Views of customed errors."""
 
-class InvalidRankError(Exception):
-	def __init__(self):
-	    # super().__init__()
-	    self.view = ExceptionsView()
+    def __init__(self, message):
+        print(message)
 
-	def __call__(self):
-		self.view.invalid_rank_error()
 
-class TournamentFinished:
-	pass
+class CustomTypeError(TypeError, BaseException):
+    """Handle TypeError of application."""
 
+    def __init__(self, message):
+        self.view = ExceptionsView(message)
+
+
+class CustomValueError(ValueError, BaseException):
+    """Handle ValueError of application."""
+
+    def __init__(self, message):
+        self.view = ExceptionsView(message)
+
+
+class CustomAssertionError(AssertionError, BaseException):
+    """Handle AssertionError of application."""
+
+    def __init__(self, message):
+        self.view = ExceptionsView(message)

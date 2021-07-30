@@ -1,9 +1,8 @@
 from .player import Player
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 
 db = TinyDB("db.json", indent=4)
 players_table = db.table("players")
-joueur = Query()
 
 
 class Match:
@@ -38,6 +37,7 @@ class Match:
         return f"({self.player_1.firstname.capitalize()} vs {self.player_2.firstname.capitalize()})"
 
     def __eq__(self, other):
+        """Defines equality between two instances of Match."""
         return (self.player_1.id, self.player_2.id) == (
             other.player_1.id,
             other.player_2.id,

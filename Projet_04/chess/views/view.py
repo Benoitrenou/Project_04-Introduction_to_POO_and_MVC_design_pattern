@@ -30,7 +30,7 @@ class CreatePlayerView:
         """Return True if user confirms informations - False if not."""
         for field in fields:
             print(field)
-        confirm = input("Confirm new player y/n ?")
+        confirm = input("Confirm new player ? Press y")
         if confirm == "y":
             return True
         else:
@@ -42,10 +42,7 @@ class CreatePlayerView:
         print(
             f"Profil de {player.firstname.capitalize()} sauvegardé - ID = {player.id}"
         )
-
-    def invalid_value(self):
-        """Inform user that input is a not in a valid format."""
-        print("Value invalid - Please respect format")
+        return None
 
 
 class CreateTournamentView:
@@ -53,16 +50,22 @@ class CreateTournamentView:
 
     def offers_playing_uncompleted(self, uncompleted_dict):
         """Return True if user chooses to play uncompleted tournament - False if not."""
-        print('A uncompleted tournament stills remains in database')
+        print("A uncompleted tournament stills remains in database")
         print(f"Name : {uncompleted_dict['name']}")
         print(f"Place : {uncompleted_dict['place']}")
         print(f"Description : {uncompleted_dict['description']}")
-        print(f"From {uncompleted_dict['starting_day']} to {uncompleted_dict['ending_day']} ")
-        confirm = input("Play this tournament y/n ? \nIf no, this tournament will be deleted from database")
+        print(
+            f"From {uncompleted_dict['starting_day']} to {uncompleted_dict['ending_day']} "
+        )
+        confirm = input(
+            "Play this tournament ? Press y\nIf no, this tournament will be deleted from database"
+        )
         if confirm == "y":
             return True
         else:
-            print("Tournament uncompleted deleted - Launching of new tournament creation")
+            print(
+                "Tournament uncompleted deleted - Launching of new tournament creation"
+            )
             return False
 
     def get_tournament_informations(self, key):
@@ -74,7 +77,7 @@ class CreateTournamentView:
         """Return True if user confirms informations - False if not."""
         for field in fields:
             print(field)
-        confirm = input("Confirm new tournament y/n ?")
+        confirm = input("Confirm new tournament ? Press y")
         if confirm == "y":
             return True
         else:
@@ -91,10 +94,7 @@ class CreateTournamentView:
         print(
             f"{new_tournament.name} is now saved in database - ID = {new_tournament.id}"
         )
-
-    def invalid_value(self):
-        """Inform user that input is a not in a valid format."""
-        print("Value invalid - Please respect format")
+        return None
 
 
 class PlayTournamentView:
@@ -102,9 +102,10 @@ class PlayTournamentView:
 
     def confirms_tournament(self, tournament_dict):
         """Return True if user confirms informations and launch playing tournament - False if not."""
-        print('Tournament uncompleted :')
-        print (f"Name : {tournament_dict['name']}")
-        confirm = input("Confirm play tournament y/n ?")
+        print("Tournament uncompleted :")
+        print(f"Name : {tournament_dict['name']}")
+        print(f"ID : {tournament_dict['id']}")
+        confirm = input("Confirm play tournament ? Press y")
         if confirm == "y":
             return True
         else:
@@ -112,8 +113,14 @@ class PlayTournamentView:
             return False
 
     def unfounded_tournament(self):
-        """Informs user no uncompleted tournament uin database."""
-        print("No uncompleted tournament found - Back to home menu.")
+        """Informs user no uncompleted tournament in database."""
+        print("No uncompleted tournament found.")
+        confirm = input("Create a new tournament ? Press y")
+        if confirm == "y":
+            return True
+        else:
+            print("Back to home menu.")
+            return False
 
     def present_matches(self, round):
         """Print matches of round."""
@@ -121,18 +128,14 @@ class PlayTournamentView:
         for match in round.matches:
             print(match)
         print("\n")
+        return None
 
     def play_match(self, match):
         """Return input of user 0 or 1 or 2."""
         winner = input(
             f"Who is the winner : 1- {match.player_1.firstname} | 2- {match.player_2.firstname} | 0- Draw ?"
         )
-        while int(winner) not in [0, 1, 2]:
-            print("Value invalid - Please respect format")
-            winner = input(
-                f"Who is the winner : 1- {match.player_1.firstname} | 2- {match.player_2.firstname} | 0- Draw ?"
-            )
-        return int(winner)
+        return winner
 
     def update_classment(self, players):
         """Print each player of players."""
@@ -142,12 +145,14 @@ class PlayTournamentView:
                 f"{player.firstname.capitalize()} avec {player.tournament_point} points - Ranking = {player.ranking}"
             )
         print("\n")
+        return None
 
     def waiting_screen(self):
         """Waiting screen."""
         input(
-            "--- Waiting screen --- Press ENTER to finish Round and update scores --- Waiting screen ---"
+            "--- Waiting screen --- Press any to finish Round and update scores --- Waiting screen ---"
         )
+        return None
 
     def get_new_ranking(self, player):
         """Return new ranking of player."""
@@ -166,12 +171,6 @@ class UpdateRankingView:
         print("Enter player ID")
         player_id = input(">>")
         return player_id
-
-    def invalid_value(self):
-        """Inform user that input is a not in a valid format."""
-        print(
-            "Value invalid - Please respect format : rank must be a positive integers"
-        )
 
     def get_new_ranking(self, player):
         """Return new ranking of player."""
@@ -192,6 +191,7 @@ class CreateReportMenuView:
         """Print each key - entry of menu.items()"""
         for key, entry in self.menu.items():
             print(f"{key} : {entry.option}")
+        return None
 
     def get_user_choice(self):
         """Return user choice of menu."""
@@ -211,19 +211,16 @@ class CreateReportView:
         criterion = input(">>")
         return criterion
 
-    def invalid_value(self):
-        """Inform user that input is a not in a valid format."""
-        print("Value invalid - Please respect format")
-
     def presents_players_report(self, report):
-        """Print items of players report via list comprehension."""
+        """Print items of players report via list comprehension - Return None."""
         for item in report:
             print(f"{item['firstname']} {item['lastname']}")
             print(f"ID : {item['id']})- Ranking : {item['ranking']}")
             print("")
+        return None
 
     def presents_tournaments_report(self, report):
-        """Print items of tournaments report via list comprehension."""
+        """Print items of tournaments report via list comprehension - Return None."""
         for item in report:
             print(f"Tournament : {item['name']}")
             print(
@@ -232,6 +229,7 @@ class CreateReportView:
             print(f"Time-control : {item['time_control']}")
             print(f"{item['description']}")
             print("")
+        return None
 
     def get_id(self):
         """Return an integer via user's input."""
@@ -240,21 +238,25 @@ class CreateReportView:
         return choosen_id
 
     def presents_rounds_report(self, report):
-        """Print items of tournament's rounds report via list comprehension."""
+        """Print items of tournament's rounds report via list comprehension - Return None."""
         for item in report:
             print(f"Name : {item['name']}")
             print(f"Number : {item['number']}")
             print(f"From {item['date_time_start']} to {item['date_time_end']}")
             print(f"Matches : {item['matches']}")
+        return None
 
     def presents_matches_report(self, report):
-        """Print items of tournament's matches report via list comprehension."""
+        """Print items of tournament's matches report via list comprehension - Return None."""
         for item in report:
             print(item)
+        return None
 
 
 class EndScreenView:
-    """View handling EndScreenController."""
+    """View handling EndScreenController - Return None."""
 
     def ends(self):
+        """Print leaving screen."""
         print("Leaving application")
+        return None
