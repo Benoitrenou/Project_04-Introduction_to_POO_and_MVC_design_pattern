@@ -300,9 +300,9 @@ class CreateReportMenuController:
         """Present reports menu - Return user choice handler."""
         self.menu.add("auto", "Report of all players", AllPlayersReportController)
         self.menu.add("auto", "Report of all tournaments", AllTournamentsReportController)
-        self.menu.add("auto", "Report of players of a tournament",TournamentPlayersReportController)
+        self.menu.add("auto", "Report of players of a tournament", TournamentPlayersReportController)
         self.menu.add("auto", "Report of rounds of a tournament", TournamentRoundsReportController)
-        self.menu.add("auto","Report of matchs of a tournament",TournamentMatchesReportController)
+        self.menu.add("auto", "Report of matchs of a tournament", TournamentMatchesReportController)
         self.menu.add("q", "Back to Home Menu", HomeMenuController)
         user_choice = self.view.get_user_choice()
         return user_choice.handler

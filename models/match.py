@@ -39,7 +39,7 @@ class Match:
     def __eq__(self, other):
         """Defines equality between two instances of Match."""
         return (self.player_1.id, self.player_2.id) == (other.player_1.id, other.player_2.id)\
-        or (self.player_1.id, self.player_2.id) == (other.player_2.id, other.player_1.id)
+            or (self.player_1.id, self.player_2.id) == (other.player_2.id, other.player_1.id)
 
     def serialize(self):
         """Return a JSON format written version of Match."""
