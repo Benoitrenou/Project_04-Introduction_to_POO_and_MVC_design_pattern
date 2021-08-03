@@ -26,26 +26,13 @@ class TournamentManager:
     ):
         """Tournament's database updating method"""
         updated_rounds = [round.serialize() for round in tournament.rounds]
-        updated_matches = [
-            match.serialize() for match in tournament.matches_already_played
-        ]
-        tournaments_table.update(
-            {"rounds": updated_rounds}, query.name == tournament.name
-        )
-        tournaments_table.update(
-            {"matches_already_played": updated_matches}, query.name == tournament.name
-        )
-        tournaments_table.update(
-            {"current_round": tournament.current_round}, query.name == tournament.name
-        )
-        tournaments_table.update(
-            {"completed": tournament.completed}, query.name == tournament.name
-        )
+        updated_matches = [match.serialize() for match in tournament.matches_already_played]
+        tournaments_table.update({"rounds": updated_rounds}, query.name == tournament.name)
+        tournaments_table.update({"matches_already_played": updated_matches}, query.name == tournament.name)
+        tournaments_table.update({"current_round": tournament.current_round}, query.name == tournament.name)
+        tournaments_table.update({"completed": tournament.completed}, query.name == tournament.name)
         for player in tournament.players:
-            players_table.update(
-                {"tournament_point": player.tournament_point},
-                query.firstname == player.firstname,
-            )
+            players_table.update({"tournament_point": player.tournament_point}, query.firstname == player.firstname)
 
     def tournaments_report(self, table=tournaments_table):
         """Return a list of all tournaments of database."""
@@ -96,9 +83,7 @@ class Tournament:
     DEFAULT_NUMBER_OF_ROUNDS = 4
     DEFAULT_TIME_CONTROL = {1: "Bullet", 2: "Blitz", 3: "Coup Rapide"}
 
-    def __init__(
-        self, name, place, starting_day, ending_day, time_control, description, id=None
-    ):
+    def __init__(self, name, place, starting_day, ending_day, time_control, description, id=None):
         self.name = name
         self.place = place
         self.starting_day = starting_day
@@ -120,9 +105,7 @@ class Tournament:
 
     def add_player(self, player_id, players_table=players_table):
         """Add a player from database with his id to Tournament."""
-        self.players.append(
-            Player.deserialize(players_table.get(doc_id=int(player_id)))
-        )
+        self.players.append(Player.deserialize(players_table.get(doc_id=int(player_id))))
         for player in self.players:
             player.tournament_point = 0
 
@@ -175,7 +158,6 @@ class Tournament:
         for key, value in self.DEFAULT_TIME_CONTROL.items():
             if self.time_control == value:
                 time_control = key
-        # self.completed = self.is_finished()
         return {
             "name": self.name,
             "place": self.place,

@@ -37,15 +37,11 @@ class PlayerManager:
 
 
 class Player:
-    """Object Player
-    Represent a player of chess
-    """
+    """Object Player."""
 
     SEX_POSSIBLE = ["M", "F"]
 
-    def __init__(
-        self, firstname, lastname, birthday, sex, ranking, tournament_point=0, id=None
-    ):
+    def __init__(self, firstname, lastname, birthday, sex, ranking, tournament_point=0, id=None):
         self.firstname = firstname
         self.lastname = lastname
         self.birthday = birthday
@@ -56,17 +52,11 @@ class Player:
 
     def __gt__(self, other):
         """Defines superiority between two instances of Player in sorting situation."""
-        return (self.tournament_point, self.ranking) > (
-            other.tournament_point,
-            other.ranking,
-        )
+        return (self.tournament_point, self.ranking) > (other.tournament_point, other.ranking)
 
     def __eq__(self, other):
         """Defines equality between two instances of Player in sorting situation."""
-        return (self.tournament_point, self.ranking) == (
-            other.tournament_point,
-            other.ranking,
-        )
+        return (self.tournament_point, self.ranking) == (other.tournament_point, other.ranking)
 
     def __hash__(self):
         return hash(self.firstname)

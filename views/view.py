@@ -39,9 +39,7 @@ class CreatePlayerView:
 
     def player_saved(self, player):
         """Print confirmation of saving profil of a player in database."""
-        print(
-            f"Profil de {player.firstname.capitalize()} sauvegardé - ID = {player.id}"
-        )
+        print(f"Profil de {player.firstname.capitalize()} sauvegardé - ID = {player.id}")
         return None
 
 
@@ -54,18 +52,12 @@ class CreateTournamentView:
         print(f"Name : {uncompleted_dict['name']}")
         print(f"Place : {uncompleted_dict['place']}")
         print(f"Description : {uncompleted_dict['description']}")
-        print(
-            f"From {uncompleted_dict['starting_day']} to {uncompleted_dict['ending_day']} "
-        )
-        confirm = input(
-            "Play this tournament ? Press y\nIf no, this tournament will be deleted from database"
-        )
+        print(f"From {uncompleted_dict['starting_day']} to {uncompleted_dict['ending_day']} ")
+        confirm = input("Play this tournament ? Press y\nIf no, this tournament will be deleted from database")
         if confirm == "y":
             return True
         else:
-            print(
-                "Tournament uncompleted deleted - Launching of new tournament creation"
-            )
+            print("Tournament uncompleted deleted - Launching of new tournament creation")
             return False
 
     def get_tournament_informations(self, key):
@@ -91,9 +83,7 @@ class CreateTournamentView:
 
     def new_tournament_created(self, new_tournament):
         """Print confirmation of saving tournament in database."""
-        print(
-            f"{new_tournament.name} is now saved in database - ID = {new_tournament.id}"
-        )
+        print(f"{new_tournament.name} is now saved in database - ID = {new_tournament.id}")
         return None
 
 
@@ -149,9 +139,7 @@ class PlayTournamentView:
 
     def waiting_screen(self):
         """Waiting screen."""
-        input(
-            "--- Waiting screen --- Press any to finish Round and update scores --- Waiting screen ---"
-        )
+        input("--- Waiting screen --- Press any to finish Round and update scores --- Waiting screen ---")
         return None
 
     def get_new_ranking(self, player):
@@ -222,10 +210,8 @@ class CreateReportView:
     def presents_tournaments_report(self, report):
         """Print items of tournaments report via list comprehension - Return None."""
         for item in report:
-            print(f"Tournament : {item['name']}")
-            print(
-                f"Place : {item['place']} - From {item['starting_day']} to {item['ending_day']}"
-            )
+            print(f"Tournament : {item['name']} - ID : {item['id']}")
+            print(f"Place : {item['place']} - From {item['starting_day']} to {item['ending_day']}")
             print(f"Time-control : {item['time_control']}")
             print(f"{item['description']}")
             print("")

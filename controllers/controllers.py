@@ -70,32 +70,24 @@ class CreatePlayerController:
             try:
                 value == datetime.strptime(value, "%d/%m/%Y").strftime("%d/%m/%Y")
             except ValueError:
-                CustomValueError(
-                    "This format of date is not valid - Please follow format DD/MM/YYY"
-                )
+                CustomValueError("This format of date is not valid - Please follow format DD/MM/YYY")
                 return False
         elif key == "Sex M/F":
             try:
                 assert value.capitalize() in Player.SEX_POSSIBLE
             except AssertionError:
-                CustomAssertionError(
-                    "This is not a valid sex - Please enter a valid answer M/F"
-                )
+                CustomAssertionError("This is not a valid sex - Please enter a valid answer M/F")
                 return False
         elif key == "Ranking - Positive Integers":
             try:
                 int(value)
             except ValueError:
-                CustomValueError(
-                    "This is not a valid rank - Please enter a positive integers"
-                )
+                CustomValueError("This is not a valid rank - Please enter a positive integers")
                 return False
             try:
                 assert int(value) > 0
             except AssertionError:
-                CustomAssertionError(
-                    "This is not a valid rank - Please enter a positive integers"
-                )
+                CustomAssertionError("This is not a valid rank - Please enter a positive integers")
                 return False
         else:
             return True
@@ -145,24 +137,18 @@ class CreateTournamentController:
             try:
                 int(value)
             except ValueError:
-                CustomValueError(
-                    "This is not a valid answer - Please choose 1 - 2 or 3"
-                )
+                CustomValueError("This is not a valid answer - Please choose 1 - 2 or 3")
                 return False
             try:
                 assert int(value) in [1, 2, 3]
             except AssertionError:
-                CustomAssertionError(
-                    "This is not a valid answer - Please choose 1 - 2 or 3"
-                )
+                CustomAssertionError("This is not a valid answer - Please choose 1 - 2 or 3")
                 return False
         if key == "Starting_day DD/MM/YYYY" or key == "Ending_day DD/MM/YYYY":
             try:
                 value == datetime.strptime(value, "%d/%m/%Y").strftime("%d/%m/%Y")
             except ValueError:
-                CustomValueError(
-                    "This format of date is not valid - Please follow format DD/MM/YYY"
-                )
+                CustomValueError("This format of date is not valid - Please follow format DD/MM/YYY")
                 return False
 
     def check_new_player_id(self, new_player_id):
@@ -231,16 +217,12 @@ class PlayTournamentController:
         try:
             int(rank)
         except ValueError:
-            CustomValueError(
-                "This is not a valid rank - Please enter a positive integers"
-            )
+            CustomValueError("This is not a valid rank - Please enter a positive integers")
             return False
         try:
             assert int(rank) > 0
         except AssertionError:
-            CustomAssertionError(
-                "This is not a valid rank - Please enter a positive integers"
-            )
+            CustomAssertionError("This is not a valid rank - Please enter a positive integers")
             return False
         return True
 
@@ -249,16 +231,12 @@ class PlayTournamentController:
         try:
             int(result)
         except ValueError:
-            CustomValueError(
-                "This is not a valid answer - Please choose winner 1-2 or 0 for draw"
-            )
+            CustomValueError("This is not a valid answer - Please choose winner 1-2 or 0 for draw")
             return False
         try:
             assert int(result) in [0, 1, 2]
         except AssertionError:
-            CustomAssertionError(
-                "This is not a valid answer - Please choose winner 1-2 or 0 for draw"
-            )
+            CustomAssertionError("This is not a valid answer - Please choose winner 1-2 or 0 for draw")
             return False
         return True
 
@@ -301,16 +279,12 @@ class UpdateRankingController:
         try:
             int(rank)
         except ValueError:
-            CustomValueError(
-                "This is not a valid rank - Please enter a positive integers"
-            )
+            CustomValueError("This is not a valid rank - Please enter a positive integers")
             return False
         try:
             assert int(rank) > 0
         except AssertionError:
-            CustomAssertionError(
-                "This is not a valid rank - Please enter a positive integers"
-            )
+            CustomAssertionError("This is not a valid rank - Please enter a positive integers")
             return False
         return True
 
@@ -325,22 +299,10 @@ class CreateReportMenuController:
     def __call__(self):
         """Present reports menu - Return user choice handler."""
         self.menu.add("auto", "Report of all players", AllPlayersReportController)
-        self.menu.add(
-            "auto", "Report of all tournaments", AllTournamentsReportController
-        )
-        self.menu.add(
-            "auto",
-            "Report of players of a tournament",
-            TournamentPlayersReportController,
-        )
-        self.menu.add(
-            "auto", "Report of rounds of a tournament", TournamentRoundsReportController
-        )
-        self.menu.add(
-            "auto",
-            "Report of matchs of a tournament",
-            TournamentMatchesReportController,
-        )
+        self.menu.add("auto", "Report of all tournaments", AllTournamentsReportController)
+        self.menu.add("auto", "Report of players of a tournament",TournamentPlayersReportController)
+        self.menu.add("auto", "Report of rounds of a tournament", TournamentRoundsReportController)
+        self.menu.add("auto","Report of matchs of a tournament",TournamentMatchesReportController)
         self.menu.add("q", "Back to Home Menu", HomeMenuController)
         user_choice = self.view.get_user_choice()
         return user_choice.handler
