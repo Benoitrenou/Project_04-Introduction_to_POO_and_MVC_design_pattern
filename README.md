@@ -40,7 +40,7 @@ Depuis votre terminal de commande, effectuez les commandes suivantes
 
 # II. Utilisation du script
 
-Pour lancer le script de l'application depuis le terminal, placez vous dans le dossier chess utilisez la commande : 
+Pour lancer le script de l'application depuis le terminal, utilisez la commande : 
 
     $ python main.py
 
