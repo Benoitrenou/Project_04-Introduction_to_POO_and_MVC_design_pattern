@@ -1,8 +1,9 @@
 from itertools import repeat
+from tinydb import TinyDB, Query
 from .round import Round
 from .player import Player
 from .match import Match
-from tinydb import TinyDB, Query
+
 
 db = TinyDB("db.json", indent=4)
 tournaments_table = db.table("tournaments")

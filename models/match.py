@@ -1,5 +1,6 @@
-from .player import Player
 from tinydb import TinyDB
+from .player import Player
+
 
 db = TinyDB("db.json", indent=4)
 players_table = db.table("players")

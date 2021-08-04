@@ -1,8 +1,8 @@
 from datetime import datetime
 from models.player import Player, PlayerManager
 from models.tournament import Tournament, TournamentManager
-from utils.menus import Menu
 import views.view as view
+from utils.menus import Menu
 from utils.exceptions import CustomValueError, CustomAssertionError
 
 
