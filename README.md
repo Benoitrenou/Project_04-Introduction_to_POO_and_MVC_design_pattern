@@ -48,5 +48,5 @@ Pour lancer le script de l'application depuis le terminal, utilisez la commande 
 
 Pour générer un nouveau rapport flake8 depuis le terminal, utilisez la commande : 
 
-    $ flake8 --format=html --htmldir=flake-report --max-line-length 119 C:/chemin/accès/du/code
+    $ flake8 C:/chemin/accès/du/code
 
