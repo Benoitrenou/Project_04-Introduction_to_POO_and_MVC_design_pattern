@@ -74,8 +74,7 @@ class Player:
     @classmethod
     def deserialize(cls, data):
         """Return instance of Player from JSON format written data."""
-        player = cls(**data)
-        return player
+        return cls(**data)
 
     @classmethod
     def list_attributes(cls):
