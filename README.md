@@ -12,7 +12,7 @@ Objectives of the project:
 
 First, you can clone the repository:
 
-    $ git clone https://github.com/Benoitrenou/projet_04.git    
+    $ git clone https://github.com/Benoitrenou/Projet_04-Introduction_to_POO_and_MVC_design_pattern.git
 
 # I. Installation of virtual environment 
 
