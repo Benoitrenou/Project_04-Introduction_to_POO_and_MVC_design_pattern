@@ -1,52 +1,71 @@
-Afin de faire fonctionner ces scripts, veuillez suivre les étapes suivantes
+The objective in the scenario of this project is to implement a chess tournament result tracking tool that follows the "Swiss round" format in a simplified version
+The tool allows to:
+- Register players to the tournament
+- Register in the database the first entrants
+- Organize the matches according to the players' ranking and results
+- Follow the results of the games and the tournament
 
-Tout d'abord, clônez en local le dépôt distant
+Objectives of the project:
+- Learn object-oriented programming
+- Set up a simple database via TinyDB
+- Organize an application following the Model-View-Controller pattern
+
+First, you can clone the repository:
 
     $ git clone https://github.com/Benoitrenou/projet_04.git    
 
-# I. Installation de l'environnement virtuel 
+# I. Installation of virtual environment 
 
-Si vous êtes sur un OS hors Windows 
+From your terminal, use the following commands
 
-Depuis votre terminal de commande, effectuez les commandes suivantes 
+## Creation of virtual environment: 
 
-## Création de l'environnement virtuel : 
-
-### Sous Linux/ MAC OS
+### With Linux/ MAC OS
 
     $ python -m venv <environment_name>
-    exemple : python -m venv env_chess 
+    example : python -m venv env_chess
     
-### Sous Windows:
+### With Windows:
     
     $ virtualenv <environment_name>
     exemple : virtualenv env_chess 
     
-## Activation de l'environnement virtuel : 
+## Activation of virtual environment : 
 
-### Sous Linux / MAC OS:
+### With Linux / MAC OS:
 
     $ source <environment_name>/bin/activate
     exemple : source env_chess/bin/activate
    
-### Sous Windows:
+### With Windows:
 
     $ source <environment_name>/Scripts/activate
     exemple : source env_chess/Scripts/activate
     
-## Installation des packages : 
+## Installation of packages : 
 
     $ pip install -r requirements.txt
 
-# II. Utilisation du script
+# II. Use of script
 
-Pour lancer le script de l'application depuis le terminal, utilisez la commande : 
+To launch the application, in the terminal use the command:
 
     $ python main.py
 
-# III. Générer un rapport flake8
+From the main menu, you can now:
+    - Create a player into the database
+    - Create a tournament into the database
+    - Play a tournament - If no tournament is found in database, the script will propose you to create a new one
+    - Update a player's ranking
+    - Create a report
+        Many reports are availables: all players by ranking or alphabetic order, all tournaments, details of players-rounds-matchs of tournament, etc. Feel free to search of !
 
-Pour générer un nouveau rapport flake8 depuis le terminal, utilisez la commande : 
+Just follow the instructions of the terminal for each of your choices, and don't forget to respect format in each of your response
 
-    $ flake8 C:/chemin/accès/du/code
+    example : date of tournament must be format DD/MM/YYYY
 
+# III. Generate a flake8 report
+
+To generate a new flake8 report, from the terminal enter the command
+
+    $ flake8 C:/path_to_local_repository
