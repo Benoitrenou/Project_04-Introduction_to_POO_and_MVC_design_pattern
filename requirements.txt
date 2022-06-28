@@ -20,7 +20,7 @@ MarkupSafe==1.1.1
 matplotlib==3.3.4
 mccabe==0.6.1
 mypy-extensions==0.4.3
-numpy==1.21
+numpy==1.22
 pathspec==0.8.1
 pillow==9.0.1
 pycodestyle==2.7.0
